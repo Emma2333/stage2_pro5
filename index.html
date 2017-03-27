@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        ul{
+            float: left;
+            margin:  10px ;
+            padding:0;
+        }
+        ul li{
+            list-style: none;
+            display: inline-block;
+            border: 1px solid #999999;
+            background: #c7254e;
+            color: #FFFFFF;
+            font-size: 20px;
+            margin-right: -4px;
+            text-align: center;
+            vertical-align:bottom;   /*底对齐*/
+        }
+    </style>
+    <title>基础JavaScript练习（一）</title>
+</head>
+<body>
+    <div id="the_body">
+        <input id="num_input" type="text" >
+        <button id="left_in">左侧入</button>
+        <button id="right_in">右侧入</button>
+        <button id="left_out">左侧出</button>
+        <button id="right_out">右侧出</button>
+        <button id="sort">排序</button>
+        <br>
+        <ul id="ul">
+            <li id="first">10</li>
+            <li>3</li>
+            <li>7</li>
+            <li>12</li>
+            <li>11</li>
+            <li>30</li>
+        </ul>
+    </div>
+
+<script>
+
+    var ul = document.getElementById('ul')
+    var list = ul.children;
+    /*console.log(list);*/
+   /* var val=parseInt(document.getElementById('num_input').value);     不可以用中间变量*/
+    var left_in=document.getElementById('left_in');
+    var right_in=document.getElementById('right_in');
+    var left_out=document.getElementById('left_out');
+    var right_out=document.getElementById('right_out');
+    var sort_li=document.getElementById('sort');
+
+
+    button();
+    paint();
+
+
+    /*==========================================交换函数=====================================================*/
+    function swap(items, firstIndex, secondIndex){
+        var temp = items[firstIndex];
+        items[firstIndex] = items[secondIndex];
+        items[secondIndex] = temp;
+    };
+
+    /*=========================================选择排序函数==================================================*/
+    function  my_sort(arr) {
+        var len=arr.length;
+        for(var i=0;i<len;i++){
+            min=i;
+            for(j=i+1;j<len;j++){
+                if(arr[j]<arr[min]){
+                    min=j;
+                }
+            }
+            if(min!=i){
+                swap(arr,i,min);
+            }
+        }
+        return arr;
+    }
+
+    /*================================最初的按键，封装===============================================*/
+    function button() {
+        /*---------left_in------------*/
+        left_in.onclick=function () {
+            var add=document.createElement('li');
+            add.innerHTML=parseInt(document.getElementById('num_input').value);
+            if(add.innerHTML>10&&add.innerHTML<100){
+                if(ul.children.length<=60){
+                    var first=list[0];
+                    ul.insertBefore(add,first)
+                }else {
+                    alert(add.innerHTML);
+                }
+            }else{
+                alert('请输入10-100之间的数字');
+            }
+            paint();
+        };
+        /*---------right_in------------*/
+        right_in.onclick=function () {
+            var add=document.createElement('li');
+            add.innerHTML=parseInt(document.getElementById('num_input').value);
+            if(add.innerHTML>10&&add.innerHTML<100){
+                if(ul.children.length<=60){
+                    ul.appendChild(add);
+                }else{
+                    alert(add.innerHTML);
+                }
+            }else{
+                alert('请输入10-100之间的数字');
+            }
+            paint()
+        };
+        /*---------left_out------------*/
+        left_out.onclick=function () {
+            var less=list[0];
+            less.remove();
+            paint();
+        };
+        /*---------right_out------------*/
+        right_out.onclick=function () {
+            var less=list[list.length-1];
+            less.remove();
+            paint();
+        };
+        /*---------sort_li------------*/
+        sort_li.onclick=function () {
+            var lis=document.getElementsByTagName('li');
+            var temp=[];
+            for(var i=0;i<lis.length;i++){
+                temp[i]=parseInt(lis[i].innerHTML);
+               /* console.log( temp[i]);*/
+            }
+           var data=my_sort(temp);
+            for(var i=0;i<data.length;i++){
+                ul.children[i].innerHTML=data[i];
+            }
+            paint();
+        }
+    }   /*function button end*/
+
+    /*=======================绘制条形图==========================*/
+    function paint() {
+        for(var i in ul.children){
+            var h=parseInt(ul.children[i].innerHTML);
+            ul.children[i].style.width="30px";
+            ul.children[i].style.height=(h+20)+'px';
+        }
+    }
+
+</script>
+</body>
+</html>
